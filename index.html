@@ -1,0 +1,1305 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stika 3b – Kafli 5: Mælingar – Upprifjun</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f0f4f8;
+  --card: #ffffff;
+  --primary: #2563eb;
+  --primary-light: #dbeafe;
+  --primary-dark: #1d4ed8;
+  --accent: #f59e0b;
+  --accent-light: #fef3c7;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --error: #ef4444;
+  --error-light: #fee2e2;
+  --text: #1e293b;
+  --text-light: #64748b;
+  --border: #e2e8f0;
+  --cat1: #3b82f6;
+  --cat2: #8b5cf6;
+  --cat3: #06b6d4;
+  --cat4: #10b981;
+  --cat5: #f59e0b;
+  --cat6: #ef4444;
+  --cat7: #ec4899;
+  --cat8: #6366f1;
+  --cat9: #14b8a6;
+  --shadow: 0 4px 24px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.hero {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #06b6d4 100%);
+  color: white;
+  padding: 3rem 1.5rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.08) 0%, transparent 50%),
+              radial-gradient(circle at 70% 30%, rgba(255,255,255,0.06) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(-2%, 2%) rotate(1deg); }
+}
+
+.hero h1 {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin-bottom: 0.3rem;
+  position: relative;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.hero p {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  position: relative;
+}
+
+.hero .subtitle {
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-top: 0.2rem;
+  opacity: 1;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* Score bar */
+.score-bar {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0.5rem;
+  z-index: 50;
+}
+
+.score-bar .label {
+  font-weight: 700;
+  color: var(--text-light);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.score-bar .score {
+  font-family: 'Fredoka One', cursive;
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.score-bar .bar-wrap {
+  flex: 1;
+  min-width: 120px;
+  height: 10px;
+  background: var(--border);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.score-bar .bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--success));
+  border-radius: 5px;
+  transition: width 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  width: 0%;
+}
+
+.score-bar .reset-btn {
+  background: var(--error-light);
+  color: var(--error);
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+}
+
+.score-bar .reset-btn:hover {
+  background: var(--error);
+  color: white;
+}
+
+/* Category grid */
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.cat-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  border-left: 5px solid var(--cat-color, var(--primary));
+  position: relative;
+  overflow: hidden;
+}
+
+.cat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.cat-card .cat-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.cat-card h3 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.cat-card .cat-desc {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.cat-card .cat-progress {
+  margin-top: 0.8rem;
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.cat-card .cat-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s;
+  width: 0%;
+}
+
+.cat-card .cat-count {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  margin-top: 0.4rem;
+  font-weight: 600;
+}
+
+/* Back button */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--card);
+  border: 2px solid var(--border);
+  padding: 0.5rem 1.2rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: all 0.2s;
+  margin-bottom: 1rem;
+}
+
+.back-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* Concept box */
+.concept-box {
+  background: linear-gradient(135deg, var(--primary-light) 0%, #ede9fe 100%);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid rgba(37, 99, 235, 0.15);
+}
+
+.concept-box h3 {
+  font-family: 'Fredoka One', cursive;
+  color: var(--primary-dark);
+  margin-bottom: 0.6rem;
+  font-size: 1.2rem;
+}
+
+.concept-box .formula {
+  background: white;
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1.2rem;
+  margin: 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--primary-dark);
+  border: 2px dashed rgba(37, 99, 235, 0.2);
+}
+
+.concept-box p, .concept-box li {
+  font-size: 0.95rem;
+  color: #334155;
+}
+
+.concept-box ul {
+  padding-left: 1.2rem;
+  margin-top: 0.4rem;
+}
+
+/* Exercise card */
+.exercise-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+
+.exercise-header {
+  padding: 1.2rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  transition: background 0.2s;
+}
+
+.exercise-header:hover {
+  background: #f8fafc;
+}
+
+.exercise-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+.exercise-title {
+  flex: 1;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.exercise-status {
+  font-size: 1.2rem;
+}
+
+.exercise-body {
+  display: none;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.exercise-body.open {
+  display: block;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.exercise-question {
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.7;
+  color: #334155;
+}
+
+.exercise-question strong {
+  color: var(--text);
+}
+
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 0.8rem;
+}
+
+.input-row label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  min-width: 30px;
+}
+
+.answer-input {
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1rem;
+  font-size: 1rem;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  width: 140px;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.answer-input:focus {
+  border-color: var(--primary);
+}
+
+.answer-input.correct {
+  border-color: var(--success);
+  background: var(--success-light);
+}
+
+.answer-input.wrong {
+  border-color: var(--error);
+  background: var(--error-light);
+}
+
+.unit-label {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  font-weight: 600;
+}
+
+.btn-row {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.8rem;
+}
+
+.btn {
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1.2rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: 'Nunito', sans-serif;
+  transition: all 0.2s;
+}
+
+.btn-check {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-check:hover { background: var(--primary-dark); }
+
+.btn-hint {
+  background: var(--accent-light);
+  color: #92400e;
+}
+
+.btn-hint:hover { background: #fde68a; }
+
+.btn-next {
+  background: var(--success-light);
+  color: #065f46;
+}
+
+.btn-next:hover { background: #a7f3d0; }
+
+/* Feedback */
+.feedback {
+  margin-top: 1rem;
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.2rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  display: none;
+}
+
+.feedback.show { display: block; animation: slideDown 0.3s ease; }
+
+.feedback.correct {
+  background: var(--success-light);
+  border: 2px solid #6ee7b7;
+  color: #065f46;
+}
+
+.feedback.wrong {
+  background: var(--error-light);
+  border: 2px solid #fca5a5;
+  color: #991b1b;
+}
+
+.feedback .fb-title {
+  font-weight: 800;
+  margin-bottom: 0.3rem;
+}
+
+.hint-box {
+  margin-top: 0.8rem;
+  background: var(--accent-light);
+  border: 2px solid #fcd34d;
+  border-radius: var(--radius-sm);
+  padding: 0.8rem 1rem;
+  font-size: 0.9rem;
+  color: #78350f;
+  display: none;
+}
+
+.hint-box.show { display: block; animation: slideDown 0.3s ease; }
+
+.hint-box .hint-title {
+  font-weight: 800;
+  margin-bottom: 0.2rem;
+}
+
+/* Glossary tooltip */
+.glossary-term {
+  text-decoration: underline dotted;
+  text-decoration-color: var(--primary);
+  text-underline-offset: 3px;
+  cursor: help;
+  color: var(--primary-dark);
+  font-weight: 700;
+  position: relative;
+}
+
+.glossary-popup {
+  display: none;
+  position: fixed;
+  background: #1e293b;
+  color: white;
+  padding: 0.8rem 1.1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  max-width: 320px;
+  z-index: 999;
+  box-shadow: var(--shadow-lg);
+  line-height: 1.5;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.glossary-popup.show { display: block; animation: fadeIn 0.2s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.difficulty {
+  display: inline-block;
+  font-size: 0.7rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  font-weight: 700;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+.diff-easy { background: #d1fae5; color: #065f46; }
+.diff-medium { background: #fef3c7; color: #92400e; }
+.diff-hard { background: #fee2e2; color: #991b1b; }
+
+.hidden { display: none !important; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .cat-grid { grid-template-columns: 1fr; }
+  .score-bar { flex-direction: column; align-items: stretch; text-align: center; }
+  .score-bar .bar-wrap { width: 100%; }
+  .answer-input { width: 110px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>📐 Mælingar</h1>
+  <p class="subtitle">Stika 3b – Kafli 5</p>
+  <p>Æfðu þig og rifjaðu upp helstu hugtök og aðferðir</p>
+</div>
+
+<div class="container">
+
+  <div class="score-bar">
+    <div>
+      <div class="label">Framvinda</div>
+      <div class="score" id="scoreText">0 / 0</div>
+    </div>
+    <div class="bar-wrap">
+      <div class="bar-fill" id="scoreBar"></div>
+    </div>
+    <button class="reset-btn" onclick="resetAll()">Byrja aftur</button>
+  </div>
+
+  <!-- MAIN MENU -->
+  <div id="mainMenu">
+    <div class="cat-grid" id="catGrid"></div>
+  </div>
+
+  <!-- CATEGORY VIEW -->
+  <div id="catView" class="hidden">
+    <button class="back-btn" onclick="goBack()">← Til baka</button>
+    <div id="catContent"></div>
+  </div>
+
+</div>
+
+<!-- Glossary popup -->
+<div class="glossary-popup" id="glossaryPopup"></div>
+
+<script>
+// ============== DATA ==============
+
+const glossary = {
+  'ummál': 'Ummál er heildarlengd allra hliða flatarforms. Til dæmis er ummál rétthyrnings U = 2·ℓ + 2·b.',
+  'flatarmál': 'Flatarmál er stærð flatar, mælt í t.d. fersentimetrum (cm²), fermetrum (m²) eða ferkílómetrum (km²).',
+  'rétthyrningur': 'Rétthyrningur er ferhyrningur þar sem öll horn eru rétt (90°). Flatarmál: F = ℓ · b.',
+  'ferningur': 'Ferningur er rétthyrningur þar sem allar hliðar eru jafn langar. Flatarmál: F = ℓ · ℓ.',
+  'þríhyrningur': 'Þríhyrningur er marghyrningur með þrjár hliðar. Flatarmál: F = (g · h) / 2.',
+  'grunnlína': 'Grunnlína (g) er sú hlið þríhyrnings sem hæðin er mæld hornrétt frá.',
+  'hæð': 'Hæð (h) þríhyrnings er hornrétt fjarlægð frá grunnlínu að gagnstæða horninu.',
+  'samsíðungur': 'Samsíðungur er ferhyrningur þar sem gagnstæðar hliðar eru samsíða og jafn langar. Flatarmál: F = g · h.',
+  'trapisa': 'Trapisa er ferhyrningur þar sem tvær hliðar eru samsíða en mislangar.',
+  'réttstrendingur': 'Réttstrendingur (kassi) er rúmmynd þar sem allir hliðarfletir eru rétthyrningar. Rúmmál: R = ℓ · b · h.',
+  'teningur': 'Teningur er réttstrendingur þar sem allar hliðar eru jafn langar. Rúmmál: R = a · a · a.',
+  'yfirborðsflatarmál': 'Yfirborðsflatarmál er samanlagt flatarmál allra hliðarflata rúmmyndar.',
+  'rúmmál': 'Rúmmál er stærð rúmmyndar, mælt í t.d. rúmsentimetrum (cm³), rúmdesimetrum (dm³) eða rúmmetrum (m³). 1 dm³ = 1 líter.',
+  'meðalhraði': 'Meðalhraði = vegalengd ÷ tími. Hann segir til um meðalferðahraðann á allri leiðinni.',
+  'píramídi': 'Píramídi hefur marghyrndan grunnflöt og þríhyrnda hliðarfleti sem mætast í einum punkti á toppnum.',
+  'þrístrendingur': 'Þrístrendingur hefur þríhyrndan grunnflöt og þrjá rétthyrnda hliðarfleti.'
+};
+
+const categories = [
+  {
+    id: 'lengdir',
+    icon: '📏',
+    title: 'Lengdarmælingar',
+    desc: 'Umreikningur mælieininga: m, dm, cm, mm',
+    color: 'var(--cat1)',
+    concept: {
+      title: '📏 Lengdareiningar',
+      formulas: ['1 m = 10 dm = 100 cm = 1000 mm'],
+      text: 'Til að breyta úr stærri einingu í minni margföldum við. Til að breyta úr minni einingu í stærri deilum við.'
+    },
+    exercises: [
+      {
+        q: 'Skrifaðu 4 m í sentimetrum.',
+        inputs: [{label:'', unit:'cm'}],
+        answers: [400],
+        hint: 'Hve margir sentimetrar eru í einum metra? Margfaldaðu þá fjölda metra með þeirri tölu.',
+        explain: '4 m = 4 × 100 cm = 400 cm. Í hverjum metra eru 100 cm.',
+        diff: 'easy'
+      },
+      {
+        q: 'Skrifaðu 2,7 m í sentimetrum.',
+        inputs: [{label:'', unit:'cm'}],
+        answers: [270],
+        hint: 'Mundu hve margir cm eru í 1 m og margfaldaðu.',
+        explain: '2,7 m = 2,7 × 100 cm = 270 cm',
+        diff: 'easy'
+      },
+      {
+        q: 'Skrifaðu 29 dm í sentimetrum.',
+        inputs: [{label:'', unit:'cm'}],
+        answers: [290],
+        hint: 'Hve margir sentimetrar eru í einum desimetra? Margfaldaðu.',
+        explain: '29 dm = 29 × 10 cm = 290 cm. Í hverjum dm eru 10 cm.',
+        diff: 'easy'
+      },
+      {
+        q: 'Skrifaðu 35 mm í sentimetrum.',
+        inputs: [{label:'', unit:'cm'}],
+        answers: [3.5],
+        hint: 'Þú ert að fara úr minni einingu í stærri — þá deilum við. Hve margir mm eru í 1 cm?',
+        explain: '35 mm = 35 ÷ 10 cm = 3,5 cm. Í hverjum cm eru 10 mm.',
+        diff: 'easy'
+      },
+      {
+        q: 'Skrifaðu 45 dm í metrum.',
+        inputs: [{label:'', unit:'m'}],
+        answers: [4.5],
+        hint: 'Úr minni einingu í stærri → deila. Hve margir dm eru í 1 m?',
+        explain: '45 dm = 45 ÷ 10 m = 4,5 m. Í hverjum metra eru 10 dm.',
+        diff: 'medium'
+      },
+      {
+        q: 'Skrifaðu 380 cm í metrum.',
+        inputs: [{label:'', unit:'m'}],
+        answers: [3.8],
+        hint: 'Þú breytir úr cm í m. Þá þarftu að deila — en með hverju?',
+        explain: '380 cm = 380 ÷ 100 m = 3,8 m',
+        diff: 'medium'
+      },
+      {
+        q: 'Skrifaðu 3,5 km í metrum.',
+        inputs: [{label:'', unit:'m'}],
+        answers: [3500],
+        hint: 'Úr stærri einingu í minni → margfalda. Hve margir metrar eru í 1 km?',
+        explain: '3,5 km = 3,5 × 1000 m = 3500 m',
+        diff: 'medium'
+      }
+    ]
+  },
+  {
+    id: 'ummal',
+    icon: '🔲',
+    title: 'Ummál',
+    desc: 'Ummál rétthyrninga, ferninga og marghyrninga',
+    color: 'var(--cat2)',
+    concept: {
+      title: '🔲 Ummál marghyrninga',
+      formulas: [
+        'Ummál rétthyrnings: U = 2·ℓ + 2·b',
+        'Ummál fernings: U = 4·a',
+        'Ummál reglulegrar marghyrn.: U = n·a'
+      ],
+      text: 'Ummál er heildarlengd allra hliðanna. Í <span class="glossary-term" data-term="ferningur">ferningi</span> eru allar hliðar jafn langar, svo U = 4 sinnum hliðarlengdin. Í reglulegum marghyrningi margföldum við fjölda hliða með lengd einnar hliðar.'
+    },
+    exercises: [
+      {
+        q: 'Reiknaðu ummál <span class="glossary-term" data-term="rétthyrningur">rétthyrnings</span> þar sem ℓ = 4,5 cm og b = 3,0 cm.',
+        inputs: [{label:'U =', unit:'cm'}],
+        answers: [15],
+        hint: 'Rétthyrningur hefur tvær lengdir og tvær breiddir. Notaðu formúluna U = 2·ℓ + 2·b.',
+        explain: 'U = 2 · 4,5 + 2 · 3,0 = 9,0 + 6,0 = 15,0 cm. Við leggjum saman tvær lengdir og tvær breiddir.',
+        diff: 'easy'
+      },
+      {
+        q: 'Reiknaðu ummál þríhyrnings með hliðar 4,2 cm, 3,8 cm og 3,5 cm.',
+        inputs: [{label:'U =', unit:'cm'}],
+        answers: [11.5],
+        hint: 'Ummál er summa allra hliðanna. Leggðu allar þrjár hliðarnar saman.',
+        explain: 'U = 4,2 + 3,8 + 3,5 = 11,5 cm. Ummál þríhyrnings er summa allra þriggja hliðanna.',
+        diff: 'easy'
+      },
+      {
+        q: 'Reiknaðu ummál reglulegrar fimmhyrnings þar sem hver hlið er 14 cm.',
+        inputs: [{label:'U =', unit:'cm'}],
+        answers: [70],
+        hint: 'Hve margar hliðar hefur fimmhyrningur? Í reglulegum marghyrningi eru allar hliðar jafn langar.',
+        explain: 'U = 5 · 14 = 70 cm. Í reglulegum marghyrningi margföldum við hliðarlengd með fjölda hliða.',
+        diff: 'medium'
+      },
+      {
+        q: 'Reiknaðu ummál reglulegrar sexhyrnings þar sem hlið er 4,5 cm.',
+        inputs: [{label:'U =', unit:'cm'}],
+        answers: [27],
+        hint: 'Hve margar hliðar hefur sexhyrningur? Margfaldaðu fjölda hliða með hliðarlengdinni.',
+        explain: 'U = 6 · 4,5 = 27,0 cm.',
+        diff: 'medium'
+      }
+    ]
+  },
+  {
+    id: 'flatarmal',
+    icon: '⬛',
+    title: 'Flatarmál',
+    desc: 'Flatarmál rétthyrninga og ferninga',
+    color: 'var(--cat3)',
+    concept: {
+      title: '⬛ Flatarmál rétthyrninga og ferninga',
+      formulas: [
+        'Rétthyrningur: F = ℓ · b',
+        'Ferningur: F = ℓ · ℓ'
+      ],
+      text: '<span class="glossary-term" data-term="flatarmál">Flatarmál</span> er stærð flatar. Við reiknum það með því að margfalda lengd og breidd. Einingarnar eru t.d. cm², m² eða km².'
+    },
+    exercises: [
+      {
+        q: 'Reiknaðu <span class="glossary-term" data-term="flatarmál">flatarmál</span> rétthyrnings: ℓ = 45 m og b = 20 m.',
+        inputs: [{label:'F =', unit:'m²'}],
+        answers: [900],
+        hint: 'Notaðu formúluna F = ℓ · b. Margfaldaðu lengd og breidd saman.',
+        explain: 'F = 45 · 20 = 900 m². Margföldum lengd og breidd saman.',
+        diff: 'easy'
+      },
+      {
+        q: 'Reiknaðu flatarmál rétthyrnings: ℓ = 16,5 m og b = 12,0 m.',
+        inputs: [{label:'F =', unit:'m²'}],
+        answers: [198],
+        hint: 'F = ℓ · b — margfaldaðu lengd og breidd saman.',
+        explain: 'F = 16,5 · 12,0 = 198,0 m².',
+        diff: 'easy'
+      },
+      {
+        q: 'Reiknaðu flatarmál <span class="glossary-term" data-term="ferningur">fernings</span> með hliðarlengd 7 m.',
+        inputs: [{label:'F =', unit:'m²'}],
+        answers: [49],
+        hint: 'Í ferningi eru lengd og breidd jafnar. Notaðu F = ℓ · ℓ.',
+        explain: 'F = 7 · 7 = 49 m². Í ferningi eru hliðarnar jafn langar svo margföldum hliðina með sjálfri sér.',
+        diff: 'easy'
+      },
+      {
+        q: 'Finndu breidd rétthyrnings þar sem F = 18 cm² og ℓ = 6,0 cm.',
+        inputs: [{label:'b =', unit:'cm'}],
+        answers: [3],
+        hint: 'Þú veist F og ℓ. Snúðu formúlunni F = ℓ · b við til að finna b.',
+        explain: 'b = F ÷ ℓ = 18 ÷ 6 = 3,0 cm. Við snúum formúlunni við og deilum.',
+        diff: 'medium'
+      },
+      {
+        q: 'Grunnlína <span class="glossary-term" data-term="samsíðungur">samsíðungs</span> er 9,0 m og hæðin 6,0 m. Hliðarlengd fernings er 7,0 m. Hve miklu stærra er flatarmál samsíðungsins en ferningsins?',
+        inputs: [{label:'Munur:', unit:'m²'}],
+        answers: [5],
+        hint: 'Reiknaðu flatarmál hvors um sig: samsíðungs (F = g · h) og fernings (F = a · a). Dragðu svo minna frá stærra.',
+        explain: 'Samsíðungur: 9,0 · 6,0 = 54 m². Ferningur: 7,0 · 7,0 = 49 m². Munur: 54 − 49 = 5 m².',
+        diff: 'medium'
+      },
+      {
+        q: 'Rétthyrningur er 10 m langur og 6,5 m breiður. Ferningur hefur 8 m langar hliðar. Hve miklu stærra er flatarmál rétthyrningsins en ferningsins?',
+        inputs: [{label:'Munur:', unit:'m²'}],
+        answers: [1],
+        hint: 'Reiknaðu flatarmál hvors um sig og finndu muninn. Notaðu F = ℓ · b og F = a · a.',
+        explain: 'Rétthyrningur: 10 · 6,5 = 65 m². Ferningur: 8 · 8 = 64 m². Munur: 65 − 64 = 1 m².',
+        diff: 'medium'
+      }
+    ]
+  },
+  {
+    id: 'thrihyrningar',
+    icon: '🔺',
+    title: 'Flatarmál þríhyrninga',
+    desc: 'Flatarmál þríhyrninga með grunnlínu og hæð',
+    color: 'var(--cat4)',
+    concept: {
+      title: '🔺 Flatarmál þríhyrninga',
+      formulas: ['F = (g · h) ÷ 2'],
+      text: 'Flatarmál <span class="glossary-term" data-term="þríhyrningur">þríhyrnings</span> er helmingur af flatarmáli rétthyrnings. <span class="glossary-term" data-term="grunnlína">Grunnlínan</span> (g) og <span class="glossary-term" data-term="hæð">hæðin</span> (h) eru alltaf hornréttar hvor á aðra.'
+    },
+    exercises: [
+      {
+        q: 'Reiknaðu flatarmál þríhyrnings: g = 11,5 cm og h = 8,0 cm.',
+        inputs: [{label:'F =', unit:'cm²'}],
+        answers: [46],
+        hint: 'Notaðu formúluna F = (g · h) ÷ 2. Margfaldaðu fyrst grunnlínu og hæð, deildu svo með 2.',
+        explain: 'F = (11,5 · 8,0) ÷ 2 = 92 ÷ 2 = 46 cm². Margföldum grunnlínu og hæð og deilum með 2.',
+        diff: 'easy'
+      },
+      {
+        q: 'Reiknaðu flatarmál þríhyrnings: g = 12,0 cm og h = 7,0 cm.',
+        inputs: [{label:'F =', unit:'cm²'}],
+        answers: [42],
+        hint: 'Flatarmál þríhyrnings = (grunnlína × hæð) deilt með 2.',
+        explain: 'F = (12,0 · 7,0) ÷ 2 = 84 ÷ 2 = 42,0 cm².',
+        diff: 'easy'
+      },
+      {
+        q: 'Reiknaðu flatarmál þríhyrnings: g = 16,0 cm og h = 6,5 cm.',
+        inputs: [{label:'F =', unit:'cm²'}],
+        answers: [52],
+        hint: 'Sama formúla og áður: F = (g · h) ÷ 2. Passaðu þig á tugabrotsreikningnum.',
+        explain: 'F = (16,0 · 6,5) ÷ 2 = 104 ÷ 2 = 52,0 cm².',
+        diff: 'easy'
+      },
+      {
+        q: '<span class="glossary-term" data-term="grunnlína">Grunnlína</span> þríhyrnings er 6,0 cm og flatarmálið er 12 cm². Hver er <span class="glossary-term" data-term="hæð">hæðin</span>?',
+        inputs: [{label:'h =', unit:'cm'}],
+        answers: [4],
+        hint: 'Þú þekkir F og g en vantar h. Snúðu formúlunni F = (g · h) ÷ 2 við til að finna h.',
+        explain: 'h = (2 · F) ÷ g = (2 · 12) ÷ 6 = 24 ÷ 6 = 4,0 cm. Við snúum formúlunni við.',
+        diff: 'medium'
+      },
+      {
+        q: 'Hæðin í þríhyrningi er 15 m og flatarmálið er 90 m². Hve löng er grunnlínan?',
+        inputs: [{label:'g =', unit:'m'}],
+        answers: [12],
+        hint: 'Þú þekkir F og h en vantar g. Snúðu formúlunni við til að finna g.',
+        explain: 'g = (2 · 90) ÷ 15 = 180 ÷ 15 = 12,0 m.',
+        diff: 'medium'
+      }
+    ]
+  },
+  {
+    id: 'yfirbordsflatar',
+    icon: '📦',
+    title: 'Yfirborðsflatarmál',
+    desc: 'Yfirborðsflatarmál réttstrendinga og píramída',
+    color: 'var(--cat6)',
+    concept: {
+      title: '📦 Yfirborðsflatarmál',
+      formulas: ['Yfl. réttstrendings = 2·(ℓ·b + ℓ·h + b·h)'],
+      text: '<span class="glossary-term" data-term="yfirborðsflatarmál">Yfirborðsflatarmál</span> er samanlagt flatarmál allra hliðarflata rúmmyndar. <span class="glossary-term" data-term="réttstrendingur">Réttstrendingur</span> hefur 6 hliðarfleti — alltaf tvo eins af hverri gerð.'
+    },
+    exercises: [
+      {
+        q: 'Reiknaðu <span class="glossary-term" data-term="yfirborðsflatarmál">yfirborðsflatarmál</span> <span class="glossary-term" data-term="réttstrendingur">réttstrendings</span>: ℓ = 8 cm, b = 5 cm, h = 4 cm.',
+        inputs: [{label:'Yfl =', unit:'cm²'}],
+        answers: [184],
+        hint: 'Réttstrendingur hefur sex hliðarfleti — tvo af hverri gerð. Finndu flatarmál eins hliðarflatar af hverri gerð, leggðu saman og margfaldaðu með 2.',
+        explain: 'Yfl = 2·(40 + 32 + 20) = 2·92 = 184 cm². Við reiknum flatarmál þriggja mismunandi hliðarflata og margföldum með 2 þar sem alltaf eru tveir eins.',
+        diff: 'easy'
+      },
+      {
+        q: 'Reiknaðu yfirborðsflatarmál <span class="glossary-term" data-term="teningur">tenings</span> þar sem hliðarlengdin er 5,0 cm.',
+        inputs: [{label:'Yfl =', unit:'cm²'}],
+        answers: [150],
+        hint: 'Teningur hefur 6 jafnstóra hliðarfleti sem allir eru ferningar. Reiknaðu flatarmál eins hliðarflatar og margfaldaðu með 6.',
+        explain: 'Yfl = 6 · (5,0 · 5,0) = 6 · 25 = 150 cm². Teningur hefur 6 jafnstóra hliðarfleti sem allir eru ferningar.',
+        diff: 'easy'
+      },
+      {
+        q: 'Reiknaðu yfirborðsflatarmál <span class="glossary-term" data-term="píramídi">píramída</span> með ferningslaga grunn (6 cm × 6 cm) og fjóra jafnhliða þríhyrninga þar sem hæð hvers þríhyrnings er 5 cm.',
+        inputs: [{label:'Yfl =', unit:'cm²'}],
+        answers: [96],
+        hint: 'Píramídinn hefur 5 fleti: einn ferning á botni og fjóra þríhyrninga. Reiknaðu flatarmál hvers forms og leggðu saman.',
+        explain: 'Grunnur: 6 · 6 = 36 cm². Einn þríhyrningur: (6 · 5) ÷ 2 = 15 cm². 4 þríhyrningar: 4 · 15 = 60 cm². Samtals: 36 + 60 = 96 cm².',
+        diff: 'medium'
+      }
+    ]
+  },
+  {
+    id: 'rummal',
+    icon: '📐',
+    title: 'Rúmmál',
+    desc: 'Rúmmál réttstrendinga og teninga, lítrar',
+    color: 'var(--cat7)',
+    concept: {
+      title: '📐 Rúmmál',
+      formulas: [
+        'Réttstrendingur: R = ℓ · b · h',
+        'Teningur: R = a · a · a',
+        '1 dm³ = 1 líter'
+      ],
+      text: '<span class="glossary-term" data-term="rúmmál">Rúmmál</span> segir okkur hve mikið pláss er í rúmmynd. Einingarnar eru cm³, dm³ og m³. Mikilvægt: 1 dm³ = 1 líter.'
+    },
+    exercises: [
+      {
+        q: 'Reiknaðu <span class="glossary-term" data-term="rúmmál">rúmmál</span> réttstrendings: ℓ = 7 cm, b = 5 cm, h = 4 cm.',
+        inputs: [{label:'R =', unit:'cm³'}],
+        answers: [140],
+        hint: 'Notaðu R = ℓ · b · h. Margfaldaðu öll þrjú málin saman.',
+        explain: 'R = 7 · 5 · 4 = 140 cm³. Margföldum lengd, breidd og hæð saman.',
+        diff: 'easy'
+      },
+      {
+        q: 'Reiknaðu rúmmál réttstrendings: ℓ = 15 cm, b = 12 cm, h = 10 cm.',
+        inputs: [{label:'R =', unit:'cm³'}],
+        answers: [1800],
+        hint: 'R = ℓ · b · h — margfaldaðu öll þrjú málin saman.',
+        explain: 'R = 15 · 12 · 10 = 1800 cm³.',
+        diff: 'easy'
+      },
+      {
+        q: 'Ferna með safa er í laginu eins og réttstrendingur. Málin eru 2,0 dm × 0,6 dm × 3,0 dm. Hve marga lítra rúmar hún?',
+        inputs: [{label:'R =', unit:'lítra'}],
+        answers: [3.6],
+        hint: 'Reiknaðu rúmmálið í dm³ með R = ℓ · b · h. Mundu að 1 dm³ jafngildir 1 lítra.',
+        explain: 'R = 2,0 · 0,6 · 3,0 = 3,6 dm³ = 3,6 lítrar. Þar sem 1 dm³ = 1 líter.',
+        diff: 'medium'
+      },
+      {
+        q: 'Hve mikill safi er í fernunni (3,6 L) þegar ¹⁄₆ hennar er loft?',
+        inputs: [{label:'Safi:', unit:'lítra'}],
+        answers: [3],
+        hint: 'Ef ¹⁄₆ er loft, hvað er þá eftir sem er safi? Hvaða brot er það? Margfaldaðu heildarrúmmálið með þeim hluta.',
+        explain: '⁵⁄₆ af 3,6 = 3,6 · 5 ÷ 6 = 18 ÷ 6 = 3,0 lítrar af safa.',
+        diff: 'medium'
+      },
+      {
+        q: 'Kassi með þvottaefni er 2,4 dm × 3,3 dm × 1,0 dm. Hve margir lítrar rúmast?',
+        inputs: [{label:'R =', unit:'lítra'}],
+        answers: [7.92],
+        hint: 'Margfaldaðu öll málin saman til að fá dm³. Mundu: 1 dm³ = 1 líter.',
+        explain: 'R = 2,4 · 3,3 · 1,0 = 7,92 dm³ = 7,92 lítrar.',
+        diff: 'medium'
+      }
+    ]
+  },
+  {
+    id: 'timi',
+    icon: '🕐',
+    title: 'Tími og tímaútreikningar',
+    desc: 'Klukkustundir, mínútur og sekúndur',
+    color: 'var(--cat8)',
+    concept: {
+      title: '🕐 Tími og tímaútreikningar',
+      formulas: [
+        '1 klst. = 60 mín.',
+        '1 mín. = 60 sek.'
+      ],
+      text: 'Til að reikna tíma milli tveggja tímasetna er gott að skipta leiðinni í þægilega hluta: fyrst að næstu heilu klukkustund, svo heilu klukkustundirnar, og svo restina.'
+    },
+    exercises: [
+      {
+        q: 'Finnur byrjaði að lesa bók kl. 17:15. Hann tók sér hvíld eftir tvo og hálfan tíma. Hvað var klukkan þá? Svaraðu á forminu kk:mm (t.d. 08:30)',
+        inputs: [{label:'Kl.', unit:''}],
+        answers: ['19:45'],
+        hint: 'Tveir og hálfur tími = 2 klst. og 30 mín. Leggðu fyrst klukkustundirnar við upphaflegan tíma og svo mínúturnar.',
+        explain: '17:15 + 2 klst. = 19:15, og svo + 30 mín. = 19:45.',
+        diff: 'easy',
+        textMode: true
+      },
+      {
+        q: 'Kvikmynd byrjaði kl. 18:35 og henni lauk kl. 20:15. Hvað var kvikmyndin löng? Svaraðu í mínútum.',
+        inputs: [{label:'', unit:'mín.'}],
+        answers: [100],
+        hint: 'Skiptu tímabilinu í þægilega búta: frá 18:35 að næstu heilu klukkustund, svo heilu klukkustundirnar, og svo restina. Leggðu svo allt saman.',
+        explain: '18:35 → 19:00 = 25 mín. 19:00 → 20:00 = 60 mín. 20:00 → 20:15 = 15 mín. Samtals: 25 + 60 + 15 = 100 mín. = 1 klst. og 40 mín.',
+        diff: 'easy'
+      },
+      {
+        q: 'Hve margar mínútur eru í 3½ klukkustund?',
+        inputs: [{label:'', unit:'mín.'}],
+        answers: [210],
+        hint: '1 klukkustund = 60 mínútur. Margfaldaðu fjölda klukkustunda með 60.',
+        explain: '3,5 · 60 = 210 mínútur.',
+        diff: 'easy'
+      },
+      {
+        q: 'Hve margar sekúndur eru í 2½ mínútu?',
+        inputs: [{label:'', unit:'sek.'}],
+        answers: [150],
+        hint: '1 mínúta = 60 sekúndur. Margfaldaðu fjölda mínútna með 60.',
+        explain: '2,5 · 60 = 150 sekúndur.',
+        diff: 'medium'
+      },
+      {
+        q: 'Vésteinn sofnaði kl. 22:45 og vaknaði kl. 07:05 næsta morgun. Hve margar mínútur svaf hann?',
+        inputs: [{label:'', unit:'mín.'}],
+        answers: [500],
+        hint: 'Skiptu tímabilinu í hluta: frá 22:45 til miðnættis, svo frá miðnætti til 07:05. Breyttu öllu í mínútur og leggðu saman.',
+        explain: '22:45 → 23:00 = 15 mín. 23:00 → 07:00 = 8 klst. = 480 mín. 07:00 → 07:05 = 5 mín. Samtals: 15 + 480 + 5 = 500 mín. = 8 klst. og 20 mín.',
+        diff: 'medium'
+      }
+    ]
+  },
+  {
+    id: 'hradi',
+    icon: '🚗',
+    title: 'Vegalengd, hraði og tími',
+    desc: 'Meðalhraði, vegalengd og tími',
+    color: 'var(--cat9)',
+    concept: {
+      title: '🚗 Vegalengd, hraði og tími',
+      formulas: [
+        'Vegalengd = hraði × tími',
+        'Hraði = vegalengd ÷ tími',
+        'Tími = vegalengd ÷ hraði'
+      ],
+      text: '<span class="glossary-term" data-term="meðalhraði">Meðalhraði</span> segir okkur meðalferðahraðann á allri leiðinni. Þessar þrjár formúlur eru allar sama jafnan snúið á mismunandi vegu.'
+    },
+    exercises: [
+      {
+        q: 'Bíll ekur 80 km á klukkustund. Hve langt fer bíllinn á 2 klukkustundum?',
+        inputs: [{label:'Vegalengd:', unit:'km'}],
+        answers: [160],
+        hint: 'Hvaða formúlu þarftu þegar þú veist hraðann og tímann en vantar vegalengdina?',
+        explain: 'V = 80 · 2 = 160 km. Vegalengd = hraði × tími.',
+        diff: 'easy'
+      },
+      {
+        q: 'Matthías gekk 4,8 km á einni klukkustund. Hve langt gekk hann á 3 klukkustundum?',
+        inputs: [{label:'Vegalengd:', unit:'km'}],
+        answers: [14.4],
+        hint: 'Vegalengd = hraði × tími. Þú veist hraðann og tímann.',
+        explain: 'V = 4,8 · 3 = 14,4 km.',
+        diff: 'easy'
+      },
+      {
+        q: 'Matthías gekk 4,8 km á klst. Hve langt gekk hann á ¼ klukkustund?',
+        inputs: [{label:'Vegalengd:', unit:'km'}],
+        answers: [1.2],
+        hint: 'Breyttu ¼ klukkustund í tugabrot fyrst. Notaðu svo vegalengd = hraði × tími.',
+        explain: 'V = 4,8 · 0,25 = 1,2 km. ¼ klukkustund er 0,25 klst.',
+        diff: 'medium'
+      },
+      {
+        q: 'Elín ók 300 km og var 4 klukkustundir á leiðinni. Hver var <span class="glossary-term" data-term="meðalhraði">meðalhraðinn</span>?',
+        inputs: [{label:'Hraði:', unit:'km/klst.'}],
+        answers: [75],
+        hint: 'Þú veist vegalengdina og tímann. Hvaða formúlu notarðu til að finna hraðann?',
+        explain: 'Hraði = 300 ÷ 4 = 75 km/klst. Deilum vegalengdinni með tímanum.',
+        diff: 'easy'
+      },
+      {
+        q: 'Anna hljóp 21 km og var 1 klst. og 45 mín. á leiðinni. Hver var meðalhraðinn?',
+        inputs: [{label:'Hraði:', unit:'km/klst.'}],
+        answers: [12],
+        hint: 'Fyrst þarftu að breyta tímanum öllu saman í klukkustundir (hve margir klukkutímar eru 45 mín.?). Deildu svo vegalengdinni með heildartímanum.',
+        explain: '1 klst. og 45 mín. = 1,75 klst. Hraði = 21 ÷ 1,75 = 12 km/klst. Mundu að breyta mínútum í klukkustundir: 45 mín. = 45/60 = 0,75 klst.',
+        diff: 'medium'
+      },
+      {
+        q: 'Matthías gekk 4,8 km/klst. Hve langt gekk hann á 40 mínútum?',
+        inputs: [{label:'Vegalengd:', unit:'km'}],
+        answers: [3.2],
+        hint: 'Breyttu fyrst 40 mínútum í brot af klukkustund (deildu mínútunum með 60). Notaðu svo formúluna vegalengd = hraði × tími.',
+        explain: '40 mín. = 40 ÷ 60 = ⅔ klst. V = 4,8 · ⅔ = 4,8 · 2/3 = 3,2 km.',
+        diff: 'hard'
+      }
+    ]
+  }
+];
+
+// ============== STATE ==============
+let state = {
+  correct: new Set(),
+  attempted: new Set(),
+  currentCat: null
+};
+
+const totalExercises = categories.reduce((s, c) => s + c.exercises.length, 0);
+
+function updateScore() {
+  const c = state.correct.size;
+  const a = state.attempted.size;
+  document.getElementById('scoreText').textContent = `${c} / ${totalExercises}`;
+  document.getElementById('scoreBar').style.width = `${(c / totalExercises) * 100}%`;
+  // Update category progress
+  document.querySelectorAll('.cat-card').forEach(card => {
+    const catId = card.dataset.cat;
+    const cat = categories.find(c => c.id === catId);
+    if (!cat) return;
+    let done = 0;
+    cat.exercises.forEach((_, i) => {
+      if (state.correct.has(`${catId}-${i}`)) done++;
+    });
+    const fill = card.querySelector('.cat-progress-fill');
+    const count = card.querySelector('.cat-count');
+    if (fill) fill.style.width = `${(done / cat.exercises.length) * 100}%`;
+    if (count) count.textContent = `${done} af ${cat.exercises.length} rétt`;
+  });
+}
+
+function resetAll() {
+  if (!confirm('Ertu viss? Öll framvinda eyðist.')) return;
+  state.correct.clear();
+  state.attempted.clear();
+  updateScore();
+  document.querySelectorAll('.answer-input').forEach(inp => {
+    inp.value = '';
+    inp.className = 'answer-input';
+  });
+  document.querySelectorAll('.feedback').forEach(f => f.classList.remove('show'));
+  document.querySelectorAll('.hint-box').forEach(h => h.classList.remove('show'));
+  document.querySelectorAll('.exercise-status').forEach(s => s.textContent = '');
+}
+
+// ============== RENDER ==============
+
+function renderMenu() {
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = '';
+  categories.forEach(cat => {
+    const card = document.createElement('div');
+    card.className = 'cat-card';
+    card.dataset.cat = cat.id;
+    card.style.setProperty('--cat-color', cat.color);
+    card.style.borderLeftColor = cat.color;
+    card.innerHTML = `
+      <div class="cat-icon">${cat.icon}</div>
+      <h3>${cat.title}</h3>
+      <div class="cat-desc">${cat.desc}</div>
+      <div class="cat-progress"><div class="cat-progress-fill" style="background:${cat.color}"></div></div>
+      <div class="cat-count">0 af ${cat.exercises.length} rétt</div>
+    `;
+    card.addEventListener('click', () => openCategory(cat.id));
+    grid.appendChild(card);
+  });
+}
+
+function openCategory(catId) {
+  state.currentCat = catId;
+  const cat = categories.find(c => c.id === catId);
+  document.getElementById('mainMenu').classList.add('hidden');
+  document.getElementById('catView').classList.remove('hidden');
+
+  const content = document.getElementById('catContent');
+  let html = '';
+
+  // Concept box
+  const c = cat.concept;
+  html += `<div class="concept-box">
+    <h3>${c.title}</h3>
+    ${c.formulas.map(f => `<div class="formula">${f}</div>`).join('')}
+    <p style="margin-top:0.6rem">${c.text}</p>
+  </div>`;
+
+  // Exercises
+  cat.exercises.forEach((ex, i) => {
+    const eid = `${catId}-${i}`;
+    const isDone = state.correct.has(eid);
+    const diffLabel = ex.diff === 'easy' ? 'Auðvelt' : ex.diff === 'medium' ? 'Miðlungs' : 'Krefjandi';
+    const diffClass = `diff-${ex.diff}`;
+
+    html += `<div class="exercise-card" id="ex-${eid}">
+      <div class="exercise-header" onclick="toggleExercise('${eid}')">
+        <div class="exercise-num" style="background:${cat.color}">${i + 1}</div>
+        <div class="exercise-title">Dæmi ${i + 1} <span class="difficulty ${diffClass}">${diffLabel}</span></div>
+        <div class="exercise-status" id="status-${eid}">${isDone ? '✅' : ''}</div>
+      </div>
+      <div class="exercise-body" id="body-${eid}">
+        <div class="exercise-question">${ex.q}</div>
+        ${ex.inputs.map((inp, j) => `
+          <div class="input-row">
+            <label>${inp.label}</label>
+            <input class="answer-input" id="input-${eid}-${j}"
+              type="${ex.textMode ? 'text' : 'number'}"
+              step="any" placeholder="?"
+              ${ex.textMode ? '' : 'inputmode="decimal"'}
+              onkeydown="if(event.key==='Enter')checkAnswer('${eid}')">
+            <span class="unit-label">${inp.unit}</span>
+          </div>
+        `).join('')}
+        <div class="btn-row">
+          <button class="btn btn-check" onclick="checkAnswer('${eid}')">Athuga ✓</button>
+          <button class="btn btn-hint" onclick="showHint('${eid}')">💡 Vísbending</button>
+        </div>
+        <div class="hint-box" id="hint-${eid}">
+          <div class="hint-title">💡 Vísbending</div>
+          ${ex.hint}
+        </div>
+        <div class="feedback" id="fb-${eid}"></div>
+      </div>
+    </div>`;
+  });
+
+  content.innerHTML = html;
+  attachGlossary();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function goBack() {
+  document.getElementById('catView').classList.add('hidden');
+  document.getElementById('mainMenu').classList.remove('hidden');
+  state.currentCat = null;
+  updateScore();
+}
+
+function toggleExercise(eid) {
+  const body = document.getElementById(`body-${eid}`);
+  body.classList.toggle('open');
+}
+
+function showHint(eid) {
+  document.getElementById(`hint-${eid}`).classList.add('show');
+}
+
+function parseNum(str) {
+  // Accept both comma and dot as decimal separator
+  return parseFloat(str.replace(',', '.'));
+}
+
+function checkAnswer(eid) {
+  const [catId, idx] = eid.split('-');
+  const cat = categories.find(c => c.id === catId);
+  const ex = cat.exercises[parseInt(idx)];
+  const fb = document.getElementById(`fb-${eid}`);
+
+  let allCorrect = true;
+  ex.inputs.forEach((inp, j) => {
+    const inputEl = document.getElementById(`input-${eid}-${j}`);
+    const val = inputEl.value.trim();
+    const expected = ex.answers[j];
+
+    let isCorrect = false;
+    if (ex.textMode) {
+      isCorrect = val.toLowerCase() === String(expected).toLowerCase();
+    } else {
+      const numVal = parseNum(val);
+      isCorrect = Math.abs(numVal - expected) < 0.05;
+    }
+
+    inputEl.classList.remove('correct', 'wrong');
+    inputEl.classList.add(isCorrect ? 'correct' : 'wrong');
+    if (!isCorrect) allCorrect = false;
+  });
+
+  state.attempted.add(eid);
+
+  if (allCorrect) {
+    state.correct.add(eid);
+    document.getElementById(`status-${eid}`).textContent = '✅';
+    fb.className = 'feedback correct show';
+    fb.innerHTML = `<div class="fb-title">🎉 Rétt!</div>${ex.explain}`;
+  } else {
+    fb.className = 'feedback wrong show';
+    fb.innerHTML = `<div class="fb-title">❌ Ekki alveg rétt – reyndu aftur!</div><div style="margin-top:0.4rem"><strong>Aðferð:</strong> ${ex.explain}</div>`;
+  }
+  updateScore();
+}
+
+// ============== GLOSSARY ==============
+
+function attachGlossary() {
+  document.querySelectorAll('.glossary-term').forEach(el => {
+    const term = el.dataset.term;
+    if (!term || !glossary[term]) return;
+    el.addEventListener('mouseenter', e => {
+      const popup = document.getElementById('glossaryPopup');
+      popup.textContent = glossary[term];
+      popup.classList.add('show');
+      const rect = el.getBoundingClientRect();
+      let top = rect.bottom + 8;
+      let left = rect.left;
+      if (left + 320 > window.innerWidth) left = window.innerWidth - 330;
+      if (left < 10) left = 10;
+      if (top + 100 > window.innerHeight) top = rect.top - 60;
+      popup.style.top = top + 'px';
+      popup.style.left = left + 'px';
+    });
+    el.addEventListener('mouseleave', () => {
+      document.getElementById('glossaryPopup').classList.remove('show');
+    });
+    el.addEventListener('click', e => {
+      const popup = document.getElementById('glossaryPopup');
+      if (popup.classList.contains('show')) {
+        popup.classList.remove('show');
+      } else {
+        popup.textContent = glossary[term];
+        popup.classList.add('show');
+        const rect = el.getBoundingClientRect();
+        popup.style.top = (rect.bottom + 8) + 'px';
+        popup.style.left = Math.min(rect.left, window.innerWidth - 330) + 'px';
+        setTimeout(() => popup.classList.remove('show'), 4000);
+      }
+    });
+  });
+}
+
+// ============== INIT ==============
+renderMenu();
+updateScore();
+attachGlossary();
+</script>
+</body>
+</html>
